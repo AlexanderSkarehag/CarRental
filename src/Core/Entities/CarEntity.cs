@@ -18,7 +18,7 @@ namespace Core.Entities
             CarType = model.CarType;
         }
         public string LicensePlate { get; set; }
-        public double CurrentMilageInKm { get; set; } = 0;
+        public decimal CurrentMilageInKm { get; set; } = 0;
         public CarTypeEnum CarType { get; set; }
         public string PartitionKey { get; set; } = "_static";
         public string Discriminator { get; set; } = nameof(CarEntity);

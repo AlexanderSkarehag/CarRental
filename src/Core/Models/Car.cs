@@ -16,7 +16,7 @@ namespace Core.Models
         }
         public Guid Id { get; set; }
         public string LicensePlate { get; set; }
-        public double CurrentMilageInKm { get; set; } = 0;
+        public decimal CurrentMilageInKm { get; set; } = 0;
         public CarTypeEnum  CarType { get; set; }
     }
 }

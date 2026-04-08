@@ -16,9 +16,9 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddSingleton<IPriceProvider, InMemoryPriceProvider>();
 
-builder.Services.AddScoped<IPriceStrategy, SubcompactPriceStrategy>();
-builder.Services.AddScoped<IPriceStrategy, StationWagonPriceStrategy>();
-builder.Services.AddScoped<IPriceStrategy, TruckPriceStrategy>();
+builder.Services.AddSingleton<IPriceStrategy, SubcompactPriceStrategy>();
+builder.Services.AddSingleton<IPriceStrategy, StationWagonPriceStrategy>();
+builder.Services.AddSingleton<IPriceStrategy, TruckPriceStrategy>();
 
 builder.Services.AddSingleton<PriceStrategyResolver>();
 builder.Services.AddScoped<PriceCalculator>();

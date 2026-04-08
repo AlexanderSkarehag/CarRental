@@ -1,5 +1,6 @@
 ﻿using Core.Consts;
 using Core.Entities;
+using Core.Exceptions;
 using Core.Interfaces;
 using Core.Models;
 using Core.Pricing;
@@ -30,7 +31,11 @@ namespace Core.Services
         {
             ArgumentNullException.ThrowIfNull(model);
 
-            model.TotalCost = await CalculateTotalCostAsync(model.RentalStart, model.RentalFinish, model.CarIdLicense.Id, model.CarStartMilageInKm);
+            var activeRentals = await _rentalRepository.ListAllAsync(new GetActiveRentalByIdSpecification(model.CarIdLicense.Id));
+            if (activeRentals.Count > 0)
+                throw new CarIsAlreadyRentedException();
+
+            model.TotalCost = await CalculateTotalCostAsync(model.RentalStart, model.RentalFinish, model.CarIdLicense.Id, (model.CarFinishMilageInKm ?? model.CarStartMilageInKm - model.CarStartMilageInKm));
             var entity = await _rentalRepository.AddAsync(MapModelToEntity(model));
             return MapEntityToModel(entity);
         }
@@ -65,7 +70,7 @@ namespace Core.Services
             rental.RentalStart = DateTimeOffset.UtcNow;
             return await Update(rental);
         }
-        public async Task<Rental> FinishRental(Guid id, decimal milage)
+        public async Task<Rental> FinishRental(Guid id, decimal mileage)
         {
             var rental = await GetRental(id);
 
@@ -73,8 +78,16 @@ namespace Core.Services
                 return rental;
 
             rental.RentalFinish = DateTimeOffset.UtcNow;
-            rental.CarFinishMilageInKm = milage;
+            rental.CarFinishMilageInKm = mileage;
+            await BumpMileage(mileage, rental);
             return await Update(rental);
+        }
+
+        private async Task BumpMileage(decimal mileage, Rental rental)
+        {
+            var car = await _carRepository.GetByIdAsync(rental.CarIdLicense.Id);
+            car.CurrentMilageInKm = mileage;
+            await _carRepository.UpdateAsync(car);
         }
 
         public async Task<Rental> Update(Rental model)
@@ -125,7 +138,7 @@ namespace Core.Services
             entity.CarFinishMilageInKm = model.CarFinishMilageInKm;
             entity.CarStartMilageInKm = model.CarStartMilageInKm;
             entity.CarIdLicense = model.CarIdLicense; //might switch car before heading out?
-            entity.TotalCost = await CalculateTotalCostAsync(entity.RentalStart, entity.RentalFinish, entity.CarIdLicense.Id, entity.CarStartMilageInKm);
+            entity.TotalCost = await CalculateTotalCostAsync(entity.RentalStart, entity.RentalFinish, entity.CarIdLicense.Id, (entity.CarFinishMilageInKm ?? entity.CarStartMilageInKm - entity.CarStartMilageInKm));
 
             return entity;
         }

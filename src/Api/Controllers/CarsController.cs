@@ -17,7 +17,7 @@ namespace CarRental.Controllers
         [HttpGet]
         public async Task<IEnumerable<Car>> Get()
         {
-            return await _carsService.GetAvailableCars();
+            return await _carsService.GetAllCars();
         }
         [HttpGet("available")]
         public async Task<IEnumerable<Car>> GetAvailable()

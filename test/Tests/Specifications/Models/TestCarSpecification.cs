@@ -5,7 +5,7 @@ namespace Tests.Specifications.Models
 {
     internal class TestCarSpecification : BaseSpecification<CarEntity>
     {
-        public TestCarSpecification(double minMilage) : base(c => c.CurrentMilageInKm > minMilage)
+        public TestCarSpecification(decimal minMilage) : base(c => c.CurrentMilageInKm > minMilage)
         {
 
         }
