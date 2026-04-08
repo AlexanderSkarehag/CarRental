@@ -1,0 +1,48 @@
+@CarRental_HostAddress = http://localhost:5052
+
+GET {{CarRental_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
+POST http://localhost:5052/api/cars
+Content-Type: application/json
+
+{
+  "id": "00000000-0000-0000-0000-000000000001",
+  "licensePlate": "CAB123",
+  "currentMilageInKm": 134.5,
+  "carType": 3
+}
+###
+GET http://localhost:5052/api/cars
+Content-Type: application/json
+Accept: application/json
+
+###
+POST http://localhost:5052/api/rentals
+Content-Type: application/json
+
+{
+  "carIdLicense": {
+    "id": "f863e0d7-eea3-4b70-aa17-76b0ab68b53a",
+    "value": "ABC124"
+  },
+  "personalIdentification": "19900101-1234",
+  "rentalStart": "2026-04-07T10:00:00Z",
+  "rentalFinish": null,
+  "carStartMilageInKm": 15000,
+  "carFinishMilageInKm": null,
+  "totalCost": null
+}
+###
+PUT http://localhost:5052/api/rentals/6ffa4814-8f6d-4b89-91c7-efd6745f2f50/start
+Content-Type: application/json
+
+###
+PUT http://localhost:5052/api/rentals/6ffa4814-8f6d-4b89-91c7-efd6745f2f50/finish
+Content-Type: application/json
+
+16000
+###
+GET http://localhost:5052/api/rentals
+Content-Type: application/json

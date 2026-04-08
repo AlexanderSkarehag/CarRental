@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="src/Api/Api.csproj" />
+  <Project Path="src/Core/Core.csproj" />
+  <Project Path="src/Infrastructure.Cosmos/Infrastructure.Cosmos.csproj" Id="f679e72c-ef11-4d41-a2b0-46eb1e4d6ef8" />
+  <Project Path="test/Tests/Tests.csproj" Id="d6bedfe4-bf2f-4135-9c67-dfa91260ebfe" />
+</Solution>
